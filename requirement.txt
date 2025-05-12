@@ -1,0 +1,6 @@
+streamlit
+numpy
+scipy
+seaborn
+matplotlib
+pip install streamlit numpy scipy seaborn matplotlib
