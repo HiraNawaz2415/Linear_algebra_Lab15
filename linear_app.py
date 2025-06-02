@@ -66,6 +66,7 @@ This app performs a wide range of linear algebra tasks:
 
 # Input matrix A
 matrix_input = st.text_area("Enter matrix A (rows comma-separated)", "2,1\n1,3")
+
 try:
     A = np.array([list(map(float, row.split(','))) for row in matrix_input.strip().split('\n')])
 
@@ -124,69 +125,72 @@ try:
 
     elif operation == "Eigenvalues & Eigenvectors":
         if A.shape[0] == A.shape[1]:
-         eigvals, eigvecs = linalg.eig(A)
-         with st.expander("📈 Eigenvalues and Eigenvectors"):
-            st.success("Eigenvalues:")
-            st.write(np.round(eigvals, 4))
-            st.success("Eigenvectors (columns):")
-            st.write(np.round(eigvecs, 4))
-
-            # Heatmap of eigenvectors
-            fig, ax = plt.subplots()
-            sns.heatmap(np.abs(eigvecs), annot=True, cmap="viridis", ax=ax)
-            ax.set_title("Heatmap of |Eigenvectors|")
-            st.pyplot(fig)
-        else:
-          st.error("Matrix must be square.")
-    elif operation == "Diagonalization":
-        if A.shape[0] == A.shape[1]:
-          eigvals, eigvecs = linalg.eig(A)
-        try:
-            P_inv = np.linalg.inv(eigvecs)
-            D = np.diag(eigvals)
-            A_diag = eigvecs @ D @ P_inv
-            with st.expander("🧾 Diagonalization Output"):
-                st.success("Matrix is diagonalizable.")
-
-                st.write("**P (eigenvectors):**")
+            eigvals, eigvecs = linalg.eig(A)
+            with st.expander("📈 Eigenvalues and Eigenvectors"):
+                st.success("Eigenvalues:")
+                st.write(np.round(eigvals, 4))
+                st.success("Eigenvectors (columns):")
                 st.write(np.round(eigvecs, 4))
 
-                st.write("**D (diagonal matrix of eigenvalues):**")
-                st.write(np.round(D, 4))
-
-                # Heatmap of D
+                # Heatmap of eigenvectors
                 fig, ax = plt.subplots()
-                sns.heatmap(np.abs(D), annot=True, cmap="magma", ax=ax)
-                ax.set_title("Heatmap of Diagonal Matrix D")
+                sns.heatmap(np.abs(eigvecs), annot=True, cmap="viridis", ax=ax)
+                ax.set_title("Heatmap of |Eigenvectors|")
                 st.pyplot(fig)
-
-                st.write("**A ≈ P·D·P⁻¹:**")
-                st.write(np.round(A_diag, 4))
-        except:
-            st.error("Matrix is not diagonalizable.")
         else:
-          st.error("Matrix must be square.")
+            st.error("Matrix must be square.")
+
+    elif operation == "Diagonalization":
+        if A.shape[0] == A.shape[1]:
+            eigvals, eigvecs = linalg.eig(A)
+            try:
+                P_inv = np.linalg.inv(eigvecs)
+                D = np.diag(eigvals)
+                A_diag = eigvecs @ D @ P_inv
+                with st.expander("🧾 Diagonalization Output"):
+                    st.success("Matrix is diagonalizable.")
+
+                    st.write("**P (eigenvectors):**")
+                    st.write(np.round(eigvecs, 4))
+
+                    st.write("**D (diagonal matrix of eigenvalues):**")
+                    st.write(np.round(D, 4))
+
+                    # Heatmap of D
+                    fig, ax = plt.subplots()
+                    sns.heatmap(np.abs(D), annot=True, cmap="magma", ax=ax)
+                    ax.set_title("Heatmap of Diagonal Matrix D")
+                    st.pyplot(fig)
+
+                    st.write("**A ≈ P·D·P⁻¹:**")
+                    st.write(np.round(A_diag, 4))
+            except:
+                st.error("Matrix is not diagonalizable.")
+        else:
+            st.error("Matrix must be square.")
+
     elif operation == "LU Decomposition":
         if A.shape[0] == A.shape[1]:
-           P, L, U = linalg.lu(A)
-           with st.expander("📚 LU Decomposition Result"):
-            st.success("P matrix:")
-            st.write(P)
-            st.success("L matrix:")
-            st.write(L)
-            fig, ax = plt.subplots()
-            sns.heatmap(np.abs(L), annot=True, cmap="Blues", ax=ax)
-            ax.set_title("Heatmap of L Matrix")
-            st.pyplot(fig)
+            P, L, U = linalg.lu(A)
+            with st.expander("📚 LU Decomposition Result"):
+                st.success("P matrix:")
+                st.write(P)
+                st.success("L matrix:")
+                st.write(L)
+                fig, ax = plt.subplots()
+                sns.heatmap(np.abs(L), annot=True, cmap="Blues", ax=ax)
+                ax.set_title("Heatmap of L Matrix")
+                st.pyplot(fig)
 
-            st.success("U matrix:")
-            st.write(U)
-            fig, ax = plt.subplots()
-            sns.heatmap(np.abs(U), annot=True, cmap="Reds", ax=ax)
-            ax.set_title("Heatmap of U Matrix")
-            st.pyplot(fig)
+                st.success("U matrix:")
+                st.write(U)
+                fig, ax = plt.subplots()
+                sns.heatmap(np.abs(U), annot=True, cmap="Reds", ax=ax)
+                ax.set_title("Heatmap of U Matrix")
+                st.pyplot(fig)
         else:
-           st.error("Matrix must be square.")
+            st.error("Matrix must be square.")
+
     elif operation == "Matrix Operations":
         matrix_b_input = st.text_area("Enter matrix B (for operations)", "1,0\n0,1")
         try:
